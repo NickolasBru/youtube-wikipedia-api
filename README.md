@@ -96,7 +96,7 @@ The application should now be running on the port you configured in `docker-comp
   ```
 
 **Parameters**:
-- **`country`** (string, optional): One of `gb`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted.
+- **`country`** (string, optional): One of `gb`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted. (Using GB for the UK since youtube uses the ISO 3166-1 alpha-2, and on that case the UK is refered as gb)
 - **`page`** (integer, optional): Defaults to `1`.
 - **`offset`** (integer, optional): Defaults to `5`.
 - **`force_refresh`** (boolean, optional): If `true`, clears the cache for the specified countries before fetching.
@@ -163,7 +163,7 @@ vendor/bin/phpunit
 1. **Force Refresh**
     - Add `?force_refresh=1` in query strings or `"force_refresh": true` in the request body to clear the cache and fetch new data from YouTube/Wikipedia.
 2. **Multiple Countries**
-    - If `country` is omitted, the aggregator returns a combined array for `[uk, nl, de, fr, es, it, gr]`.
+    - If `country` is omitted, the aggregator returns a combined array for `[gb, nl, de, fr, es, it, gr]`.
 3. **Swapping Data Sources**
     - Easily replace **YouTube** or **Wikipedia** by implementing the respective interfaces. Update your service provider binding accordingly.
 4. **Rate Limits**
