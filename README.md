@@ -70,13 +70,6 @@ The application should now be running on the port you configured in `docker-comp
 ---
 
 ## Running the Application
-
-- **Local (without Docker)**:
-  ```bash
-  php artisan serve
-  ```
-  Visit [http://localhost:8000](http://localhost:8000).
-
 - **Using Docker**:
   Navigate to [http://localhost:8080](http://localhost:8080) (or whatever port is mapped in your `docker-compose.yml`).
 
