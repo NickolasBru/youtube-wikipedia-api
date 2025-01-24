@@ -21,9 +21,6 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Move the example env
-RUN mv /var/www/.env.example /var/www/.env
-
 # Copy application files
 COPY src /var/www
 
