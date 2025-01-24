@@ -24,6 +24,9 @@ WORKDIR /var/www
 # Copy application files
 COPY src /var/www
 
+# Move the example env
+RUN mv /var/www/.env.example /var/www/.env
+
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage
 

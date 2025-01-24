@@ -1,4 +1,4 @@
-# Youtube & Wikipedia API BE Challenge
+# Bravoure BE Challenge
 
 This Laravel-based application fetches and merges data from **YouTube** (most popular videos) and **Wikipedia** (leading paragraphs) for several European countries. It demonstrates a clean architecture with interfaces, aggregators, caching, and rate limiting.
 
@@ -8,8 +8,8 @@ This Laravel-based application fetches and merges data from **YouTube** (most po
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/NickolasBru/youtube-wikipedia-resume-api
-   cd youtube-wikipedia-resume-api
+   git clone https://github.com/your-username/youtube-wikipedia-api
+   cd youtube-wikipedia-api
    ```
 
 2. **Install PHP dependencies**:
@@ -36,32 +36,51 @@ If you prefer a Docker-based setup:
    ```bash
    docker compose up -d --build
    ```
-
-2. **Install dependencies** inside the container:
+   
+2. **Generate app key** inside the container:
    ```bash
-   docker compose exec app composer install
+    php artisan key:generate
    ```
 
-3. **Generate app key**:
-   ```bash
-   docker compose exec app php artisan key:generate
-   ```
-
-The application should now be running on the port you configured in `docker-compose.yml` (commonly `http://127.0.0.1:8080`).
+The application should now be running on the port you configured in `docker-compose.yml` (commonly `http://localhost:8080`).
 
 ---
 
 ## Configuration
 
-Open your `.env` file and verify or set the following variables:
+### Cache Setup with SQLite
 
-```env
-YOUTUBE_API_KEY=YOUR_ACTUAL_YOUTUBE_KEY
-```
+1. **Create the SQLite Database File**  
+   Run the following command to create an empty SQLite file:
+   ```bash
+   touch database/cache.sqlite
+   ```
 
-- **YOUTUBE_API_KEY**: Required for calling the YouTube Data API (videos.list).
-- **CACHE_DRIVER**: By default, you can use `file`; for better performance in production, consider `redis`.
-- Adjust DB/Redis credentials as needed if you’re using them.
+2. **Update `.env` Configuration**  
+   Ensure your `.env` file has the following entries:
+   ```env
+   CACHE_DRIVER=database
+   DB_CONNECTION=sqlite
+   DB_DATABASE=database/cache.sqlite
+   ```
+
+3. **Create the Cache Table**  
+   Generate the cache table migration and run it:
+   ```bash
+   php artisan cache:table
+   php artisan migrate
+   ```
+
+4. **Verify the Setup**  
+   Use Artisan Tinker to test caching:
+   ```bash
+   php artisan tinker
+   ```
+   Inside Tinker:
+   ```php
+   cache()->put('test_key', 'test_value', 600); // Store for 600 seconds
+   cache()->get('test_key'); // Should return 'test_value'
+   ```
 
 ---
 
@@ -71,10 +90,10 @@ YOUTUBE_API_KEY=YOUR_ACTUAL_YOUTUBE_KEY
   ```bash
   php artisan serve
   ```
-  Visit [http://127.0.0.1:8000](http://127.0.0.1:8000).
+  Visit [http://localhost:8000](http://localhost:8000).
 
 - **Using Docker**:
-  Navigate to [http://127.0.0.1:8080](http://127.0.0.1:8080) (or whatever port is mapped in your `docker-compose.yml`).
+  Navigate to [http://localhost:8080](http://localhost:8080) (or whatever port is mapped in your `docker-compose.yml`).
 
 ---
 
@@ -98,7 +117,7 @@ YOUTUBE_API_KEY=YOUR_ACTUAL_YOUTUBE_KEY
   ```
 
 **Parameters**:
-- **`country`** (string, optional): One of `gb`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted.
+- **`country`** (string, optional): One of `uk`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted.
 - **`page`** (integer, optional): Defaults to `1`.
 - **`offset`** (integer, optional): Defaults to `5`.
 - **`force_refresh`** (boolean, optional): If `true`, clears the cache for the specified countries before fetching.
@@ -110,7 +129,7 @@ Content-Type: application/json
 
 {
   "country": "nl",
-  "page": 1,
+  "page": 2,
   "offset": 5,
   "force_refresh": true
 }
@@ -119,7 +138,7 @@ Content-Type: application/json
 **Sample JSON Response**:
 ```json
 {
-  "page": 1,
+  "page": 2,
   "limit": 5,
   "total": 7,
   "data": [
@@ -163,9 +182,9 @@ vendor/bin/phpunit
 ## Additional Tips
 
 1. **Force Refresh**
-    - Add `?force_refresh=1` to clear the cache and fetch new data from YouTube/Wikipedia.
+    - Add `?force_refresh=1` in query strings or `"force_refresh": true` in the request body to clear the cache and fetch new data from YouTube/Wikipedia.
 2. **Multiple Countries**
-    - If `country` is omitted, the aggregator returns a combined array for `[gb, nl, de, fr, es, it, gr]`.
+    - If `country` is omitted, the aggregator returns a combined array for `[uk, nl, de, fr, es, it, gr]`.
 3. **Swapping Data Sources**
     - Easily replace **YouTube** or **Wikipedia** by implementing the respective interfaces. Update your service provider binding accordingly.
 4. **Rate Limits**
