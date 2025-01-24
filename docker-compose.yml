@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  # Backend service
+  backend:
+    image: php:8.3-fpm
+    container_name: laravel-backend-bravoure
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    volumes:
+      - ./src:/var/www
+
+  # Web server (Nginx)
+  webserver:
+    image: nginx:1.26.2-alpine
+    container_name: nginx-webserver-bravoure
+    volumes:
+      - ./src/public:/var/www/public
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
