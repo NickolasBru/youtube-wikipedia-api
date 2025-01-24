@@ -5,30 +5,7 @@ This Laravel-based application fetches and merges data from **YouTube** (most po
 ---
 
 ## Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-username/youtube-wikipedia-api
-   cd youtube-wikipedia-api
-   ```
-
-2. **Install PHP dependencies**:
-   ```bash
-   composer install
-   ```
-
-3. **Copy `.env.example` to `.env`**:
-   ```bash
-   cp .env.example .env
-   ```
-   Then fill in your environment variables (e.g., `APP_KEY`, `YOUTUBE_API_KEY`, `CACHE_DRIVER`, etc.).
-
-4. **Generate the app key**:
-   ```bash
-   php artisan key:generate
-   ```
-
-### Using Docker (Optional)
+### Using Docker
 
 If you prefer a Docker-based setup:
 
@@ -36,10 +13,23 @@ If you prefer a Docker-based setup:
    ```bash
    docker compose up -d --build
    ```
-   
-2. **Generate app key** inside the container:
+2. **Copy `.env.example` to `.env`** inside the container:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Install composer** inside the container:
+   ```bash
+    composer install
+   ```
+4. **Generate app key** inside the container:
    ```bash
     php artisan key:generate
+   ```
+
+5. **Update youtube api key**:
+   ```bash
+    on .env update YOUTUBE_API_KEY with your key
    ```
 
 The application should now be running on the port you configured in `docker-compose.yml` (commonly `http://localhost:8080`).
@@ -75,11 +65,6 @@ The application should now be running on the port you configured in `docker-comp
    Use Artisan Tinker to test caching:
    ```bash
    php artisan tinker
-   ```
-   Inside Tinker:
-   ```php
-   cache()->put('test_key', 'test_value', 600); // Store for 600 seconds
-   cache()->get('test_key'); // Should return 'test_value'
    ```
 
 ---
