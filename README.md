@@ -27,9 +27,9 @@ If you prefer a Docker-based setup:
     php artisan key:generate
    ```
 
-5. **Update youtube api key**:
+5. **Update youtube api key** on .env update the following field with your key:
    ```bash
-    on .env update YOUTUBE_API_KEY with your key
+     YOUTUBE_API_KEY
    ```
 
 The application should now be running on the port you configured in `docker-compose.yml` (commonly `http://localhost:8080`).
@@ -41,7 +41,7 @@ The application should now be running on the port you configured in `docker-comp
 ### Cache Setup with SQLite
 
 1. **Create the SQLite Database File**  
-   Run the following command to create an empty SQLite file:
+   Run the following command inside the container to create an empty SQLite file:
    ```bash
    touch database/cache.sqlite
    ```
@@ -65,6 +65,7 @@ The application should now be running on the port you configured in `docker-comp
    Use Artisan Tinker to test caching:
    ```bash
    php artisan tinker
+   Cache::has('test');
    ```
 
 ---
@@ -95,7 +96,7 @@ The application should now be running on the port you configured in `docker-comp
   ```
 
 **Parameters**:
-- **`country`** (string, optional): One of `uk`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted.
+- **`country`** (string, optional): One of `gb`, `nl`, `de`, `fr`, `es`, `it`, `gr`. Defaults to all countries if omitted.
 - **`page`** (integer, optional): Defaults to `1`.
 - **`offset`** (integer, optional): Defaults to `5`.
 - **`force_refresh`** (boolean, optional): If `true`, clears the cache for the specified countries before fetching.
